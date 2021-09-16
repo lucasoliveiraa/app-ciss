@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   View, 
   Text, 
   StyleSheet, 
   TextInput, 
   FlatList,
-} from 'react-native'
+} from 'react-native';
 import { Button } from '../../components/Button';
 
+import { 
+  Container,
+  Header,
+  Title,
+  Content,
+} from './styles';
+
 export function Home() {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-    </View>
+    <Container>
+      <Header>
+        <Title>Home</Title>
+      </Header>
+      <Content>
+
+      <Button 
+        title='Adicionar Colaborador' 
+        onPress={() => navigation.navigate('Register')}
+      />
+      </Content>
+
+    </Container>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    backgroundColor: '#121015',
-    paddingVertical: 30,
-    paddingHorizontal: 30
-  },
-  title: {
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 14,
-  },
-});

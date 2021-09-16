@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { Keyboard, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import api from '../../services/api';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
@@ -14,7 +15,6 @@ import {
   Title,
   Form,
   Fields,
-  TransationTypes,
 } from './styles';
 import { Alert } from 'react-native';
 
@@ -26,10 +26,10 @@ interface FormData {
 }
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('Nome é obrigatório'),
-  sobrenome: Yup.string().required('Sobrenome é obrigatório'),
+  name: Yup.string().required('Nome é obrigatório').min(2, 'No mínimo 2 caracteres').max(30, 'No máximo 30 caracteres'),
+  sobrenome: Yup.string().required('Sobrenome é obrigatório').min(2, 'No mínimo 2 caracteres').max(50, 'No máximo 50 caracteres'),
   email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
-  pis: Yup.number().min(11, 'No mínimo 11 dígitos').typeError('Informe um '),
+  pis: Yup.number().moreThan(9999999999, 'No mínimo 11 dígitos').typeError('Informe o número do NIS (PIS)'),
 });
 
 export function Register() {
@@ -37,23 +37,31 @@ export function Register() {
     resolver: yupResolver(schema)
   });
 
-  function handleRegister(form: FormData){
-    const data = {
-      name: form.name,
-      sobrenome: form.sobrenome,
-      email: form.email,
-      pis: form.pis,
-    }
-    console.log(data)
-  }
+  const handleRegister = useCallback( 
+    async (form: FormData) => {
+      try {
+        await api.post('/colaboradores', form);
+
+        Alert.alert(
+          'Cadastro realizado com sucesso!',
+          'Colaborador registrado.',
+        );
+        console.log(form);
+      } catch (err) {
+        Alert.alert(
+          'Erro no cadastro',
+          'Ocorreu um erro ao fazer cadastro, tente novamente.',
+        );
+      }
+    }, [])
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <Container>
         <Header>
           <Title>Cadastro</Title>
         </Header>
+
 
         <Form>
           <Fields>
@@ -91,6 +99,7 @@ export function Register() {
               placeholder="PIS"
               placeholderTextColor="#555"
               keyboardType="numeric"
+              maxLength={11}
               error={errors.pis && errors.pis.message}
             />
           </Fields>
