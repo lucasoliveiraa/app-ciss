@@ -10,7 +10,7 @@ import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InputForm } from '../../components/InputForm';
 
-import { 
+import {
   Container,
   Header,
   Title,
@@ -55,7 +55,7 @@ export function Edit() {
     resolver: yupResolver(schema)
   });
 
-  const handleRegister = useCallback( 
+  const handleRegister = useCallback(
     async (form: FormData) => {
       try {
         await api.post('/colaboradores', form);
@@ -83,7 +83,7 @@ export function Edit() {
 
         <Form>
           <Fields>
-            <InputForm 
+            <InputForm
               name="name"
               value={name}
               control={control}
@@ -94,7 +94,7 @@ export function Edit() {
               error={errors.name && errors.name.message}
             />
 
-            <InputForm 
+            <InputForm
               value={sobrenome}
               name="sobrenome"
               control={control}
@@ -103,7 +103,7 @@ export function Edit() {
               error={errors.sobrenome && errors.sobrenome.message}
             />
 
-            <InputForm 
+            <InputForm
               value={email}
               name="email"
               control={control}
@@ -114,7 +114,7 @@ export function Edit() {
               error={errors.email && errors.email.message}
             />
 
-            <InputForm 
+            <InputForm
               value={String(pis)}
               name="pis"
               control={control}
@@ -126,8 +126,8 @@ export function Edit() {
             />
           </Fields>
 
-          <Button 
-            title='Confirmar Mudança' 
+          <Button
+            title='Confirmar Mudança'
             onPress={handleSubmit(handleRegister)}
           />
         </Form>

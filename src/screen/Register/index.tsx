@@ -1,22 +1,22 @@
 import React, { useState, useCallback } from 'react';
-import { Keyboard, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, ScrollView, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
+import { useNavigation } from '@react-navigation/native';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InputForm } from '../../components/InputForm';
 
-import { 
+import {
   Container,
   Header,
   Title,
   Form,
   Fields,
 } from './styles';
-import { Alert } from 'react-native';
 
 interface FormData {
   name: string;
@@ -33,27 +33,28 @@ const schema = Yup.object().shape({
 });
 
 export function Register() {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const navigation = useNavigation();
+  const { control, handleSubmit, formState: { errors }, getValues } = useForm({
     resolver: yupResolver(schema)
   });
 
-  const handleRegister = useCallback( 
+  const handleRegister = useCallback(
     async (form: FormData) => {
       try {
         await api.post('/colaboradores', form);
 
         Alert.alert(
-          'Cadastro realizado com sucesso!',
-          'Colaborador registrado.',
+          'Cadastro realizado com sucesso!'
         );
         console.log(form);
+        navigation.goBack()
       } catch (err) {
         Alert.alert(
           'Erro no cadastro',
           'Ocorreu um erro ao fazer cadastro, tente novamente.',
         );
       }
-    }, [])
+    }, [navigation])
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -62,10 +63,9 @@ export function Register() {
           <Title>Cadastro</Title>
         </Header>
 
-
         <Form>
           <Fields>
-            <InputForm 
+            <InputForm
               name="name"
               control={control}
               placeholder="Nome"
@@ -75,7 +75,7 @@ export function Register() {
               error={errors.name && errors.name.message}
             />
 
-            <InputForm 
+            <InputForm
               name="sobrenome"
               control={control}
               placeholder="Sobrenome"
@@ -83,7 +83,7 @@ export function Register() {
               error={errors.sobrenome && errors.sobrenome.message}
             />
 
-            <InputForm 
+            <InputForm
               name="email"
               control={control}
               autoCorrect={false}
@@ -93,7 +93,7 @@ export function Register() {
               error={errors.email && errors.email.message}
             />
 
-            <InputForm 
+            <InputForm
               name="pis"
               control={control}
               placeholder="PIS"
@@ -104,8 +104,8 @@ export function Register() {
             />
           </Fields>
 
-          <Button 
-            title='Cadastrar' 
+          <Button
+            title='Cadastrar'
             onPress={handleSubmit(handleRegister)}
           />
         </Form>

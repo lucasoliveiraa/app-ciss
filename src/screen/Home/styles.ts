@@ -34,3 +34,35 @@ export const Content = styled.View`
   justify-content: space-between;
   padding: 24px;
 `;
+
+export const BoxContainer = styled.View`
+  background: #1F1E25;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px 0;
+`;
+
+export const BoxHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const BoxTitle = styled.Text`
+  font-weight: bold;
+  color: #FFFFFF;
+  font-size: ${RFValue(22)}px;
+  margin-left: 4px;
+`;
+
+export const TextEmail = styled.Text`
+  font-weight: bold;
+  color: #FFFFFF;
+  font-size: ${RFValue(16)}px;
+  margin-left: 4px;
+`;
+
+export const BoxButtons = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+`;
