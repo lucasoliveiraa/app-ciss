@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import api from '../../services/api';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import {
   TouchableOpacity,
@@ -29,6 +30,7 @@ interface ColabCardProps {
 
 
 export function CardColaborador({colab} : ColabCardProps){
+  const navigation = useNavigation();
 
   function handleRemoveCharacter(id: string) {
     api.delete(`/colaboradores/${id}`);
@@ -56,7 +58,7 @@ export function CardColaborador({colab} : ColabCardProps){
       </Header>
       <BoxButtons>
         <TouchableOpacity
-          onPress={() => console.log(colab.id)}
+          onPress={() => navigation.navigate('Edit', colab)}
         >
           <Icon name='edit' size={24} color='green' />
         </TouchableOpacity>
