@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Home } from '../screen/Home';
+import { List } from '../screen/List';
 import { Register } from '../screen/Register';
 import { Edit } from '../screen/Edit';
 
@@ -12,9 +12,9 @@ const Routes = () => (
     screenOptions={{
       headerShown: false,
     }}
-    initialRouteName="Home"
+    initialRouteName="List"
   >
-    <stackRoutes.Screen name='Home' component={Home} />
+    <stackRoutes.Screen name='List' component={List} />
     <stackRoutes.Screen name='Register' component={Register} />
     <stackRoutes.Screen name='Edit' component={Edit} />
   </stackRoutes.Navigator>

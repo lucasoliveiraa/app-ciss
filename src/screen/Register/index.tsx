@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Keyboard, ScrollView, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -25,6 +25,10 @@ interface FormData {
   pis: number;
 }
 
+type NavigationProps = {
+  navigate: (screen: string) => void;
+}
+
 const schema = Yup.object().shape({
   name: Yup.string().required('Nome é obrigatório').min(2, 'No mínimo 2 caracteres').max(30, 'No máximo 30 caracteres'),
   sobrenome: Yup.string().required('Sobrenome é obrigatório').min(2, 'No mínimo 2 caracteres').max(50, 'No máximo 50 caracteres'),
@@ -33,28 +37,28 @@ const schema = Yup.object().shape({
 });
 
 export function Register() {
-  const navigation = useNavigation();
-  const { control, handleSubmit, formState: { errors }, getValues } = useForm({
+  const navigation = useNavigation<NavigationProps>();
+  const { control, handleSubmit, reset, formState: { errors }, getValues } = useForm({
     resolver: yupResolver(schema)
   });
 
-  const handleRegister = useCallback(
-    async (form: FormData) => {
-      try {
-        await api.post('/colaboradores', form);
+  async function handleRegister(form: FormData) {
+    try {
+      await api.post('/colaboradores', form);
 
-        Alert.alert(
-          'Cadastro realizado com sucesso!'
-        );
-        console.log(form);
-        navigation.goBack()
-      } catch (err) {
-        Alert.alert(
-          'Erro no cadastro',
-          'Ocorreu um erro ao fazer cadastro, tente novamente.',
-        );
-      }
-    }, [navigation])
+      Alert.alert(
+        'Cadastro realizado com sucesso!'
+      );
+      console.log(form);
+      reset();
+      navigation.navigate('List');
+    } catch (err) {
+      Alert.alert(
+        'Erro no cadastro',
+        'Ocorreu um erro ao fazer cadastro, tente novamente.',
+      );
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

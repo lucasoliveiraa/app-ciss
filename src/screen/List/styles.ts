@@ -35,19 +35,19 @@ export const Content = styled.View`
   padding: 24px;
 `;
 
-export const BoxContainer = styled.View`
+export const CardColab = styled.View`
   background: #1F1E25;
   padding: 15px;
   border-radius: 10px;
   margin: 10px 0;
 `;
 
-export const BoxHeader = styled.View`
+export const CardHeader = styled.View`
   flex-direction: row;
   align-items: center;
 `;
 
-export const BoxTitle = styled.Text`
+export const CardTitle = styled.Text`
   font-weight: bold;
   color: #FFFFFF;
   font-size: ${RFValue(22)}px;
@@ -61,8 +61,14 @@ export const TextEmail = styled.Text`
   margin-left: 4px;
 `;
 
-export const BoxButtons = styled.View`
+export const CardButtons = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+`;
+
+export const LoadContainer = styled.View`
+    flex: 1;
+    align-items: center;
+    justify-content: center;
 `;

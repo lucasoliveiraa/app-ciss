@@ -20,6 +20,7 @@ import {
 import { Alert } from 'react-native';
 
 interface Params {
+  id: string;
   name: string;
   sobrenome: string;
   email: string;
@@ -33,6 +34,10 @@ interface FormData {
   pis: number;
 }
 
+type NavigationProps = {
+  navigate: (screen: string) => void;
+}
+
 const schema = Yup.object().shape({
   name: Yup.string().required('Nome é obrigatório').min(2, 'No mínimo 2 caracteres').max(30, 'No máximo 30 caracteres'),
   sobrenome: Yup.string().required('Sobrenome é obrigatório').min(2, 'No mínimo 2 caracteres').max(50, 'No máximo 50 caracteres'),
@@ -41,7 +46,7 @@ const schema = Yup.object().shape({
 });
 
 export function Edit() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
   const routes = useRoute();
 
   const {
@@ -49,26 +54,26 @@ export function Edit() {
     sobrenome,
     email,
     pis,
+    id,
   } = routes.params as Params;
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors }, getValues, setValue } = useForm({
     resolver: yupResolver(schema)
   });
 
   const handleRegister = useCallback(
     async (form: FormData) => {
       try {
-        await api.post('/colaboradores', form);
+        await api.put(`/colaboradores/${id}`, form);
 
         Alert.alert(
-          'Cadastro realizado com sucesso!',
-          'Colaborador registrado.',
+          'Cadastro atualizado com sucesso!',
         );
-        console.log(form);
+        navigation.navigate('List');
       } catch (err) {
         Alert.alert(
-          'Erro no cadastro',
-          'Ocorreu um erro ao fazer cadastro, tente novamente.',
+          'Erro na atualização',
+          'Ocorreu um erro ao atualizar, tente novamente.',
         );
       }
     }, [])
@@ -85,7 +90,7 @@ export function Edit() {
           <Fields>
             <InputForm
               name="name"
-              value={name}
+              onChangeText={text =>  setValue('name', text)}
               control={control}
               placeholder="Nome"
               autoCapitalize="sentences"
@@ -95,8 +100,8 @@ export function Edit() {
             />
 
             <InputForm
-              value={sobrenome}
               name="sobrenome"
+              onChangeText={text =>  setValue('sobrenome', text)}
               control={control}
               placeholder="Sobrenome"
               placeholderTextColor="#555"
@@ -104,8 +109,8 @@ export function Edit() {
             />
 
             <InputForm
-              value={email}
               name="email"
+              onChangeText={text =>  setValue('email', text)}
               control={control}
               autoCorrect={false}
               placeholder="E-mail"
